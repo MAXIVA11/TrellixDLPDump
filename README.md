@@ -23,7 +23,7 @@
 - [How a single action is evaluated](#how-a-single-action-is-evaluated)
 - [Component reference](#component-reference)
   - [1 · Kernel drivers (ring 0)](#1--kernel-drivers-ring-0)
-  - [2 · The agent service & processes](#2--the-agent-service--processes)
+  - [2 · The agent service & processes](#2--the-agent-service--processes) — **[deep dive: `fcags.exe`](docs/FCAGS.md)**
   - [3 · User-mode hooks](#3--user-mode-hooks)
   - [4 · Content classification: KeyView + OCR](#4--content-classification-keyview--ocr)
   - [5 · Labels, encryption & identity](#5--labels-encryption--identity)
@@ -130,9 +130,13 @@ cannot go around.
 
 ### 2 · The agent service & processes
 
+> **`fcags.exe` is the brain of the product** — it holds the policy, runs the
+> classification engine, drives the kernel drivers, injects and talks to the hooks, and
+> reports incidents. It gets its own focused teardown in **[docs/FCAGS.md](docs/FCAGS.md)**.
+
 | Executable | Description | Size |
 |---|---|---|
-| **`fcags.exe`** | **DLP Endpoint Service** — the core process (`TrellixDLPAgentService`, runs as SYSTEM). Holds the policy engine, classification pipeline and event reporting. | 21 MB |
+| **[`fcags.exe`](docs/FCAGS.md)** | **DLP Endpoint Service** — the core process (`TrellixDLPAgentService`, runs as LocalSystem). Holds the policy engine, the CSF classification pipeline (dictionaries + RE2 regex + Exact Data Matching + registered documents), the device/WFP managers, and event reporting. ACE + boost 1.84. | 21 MB |
 | **`fcag.exe`** | **Endpoint Agent** — per-session host that enforces in the user's context and shows notifications/justification prompts. | 19 MB |
 | **`fcagswd.exe`** | **Service WatchDog** — restarts the agent if it is killed. | 6 MB |
 | **`fcagte.exe`** | **Text Extractor** — hosts the KeyView/OCR extraction pipeline out-of-process. | 10 MB |
