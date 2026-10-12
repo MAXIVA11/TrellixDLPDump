@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 860" font-family="'Segoe UI',Roboto,Helvetica,Arial,sans-serif" role="img" aria-label="Trellix DLP Endpoint architecture">
+  <style>
+    :root { color-scheme: light dark; }
+    .bg      { fill:#ffffff; }
+    .title   { fill:#0b1324; font-size:26px; font-weight:700; }
+    .sub     { fill:#5b6675; font-size:13px; }
+    .band    { fill:#f4f6fb; stroke:#dfe4ee; }
+    .bandlbl { fill:#8a94a6; font-size:12px; font-weight:700; letter-spacing:.14em; }
+    .box     { fill:#ffffff; stroke:#c6ced9; }
+    .boxt    { fill:#162032; font-size:13.5px; font-weight:600; }
+    .boxd    { fill:#66707f; font-size:10.5px; }
+    .kernel  { fill:#fff3ec; stroke:#f0a877; }
+    .kernelt { fill:#8a3b12; font-size:13px; font-weight:600; }
+    .svc     { fill:#eef4ff; stroke:#8fb4f5; }
+    .svct    { fill:#123a86; font-size:13.5px; font-weight:700; }
+    .mgmt    { fill:#eefaf1; stroke:#86cf9f; }
+    .mgmtt   { fill:#1d6b39; font-size:13px; font-weight:600; }
+    .edge    { stroke:#aab3c2; stroke-width:1.6; fill:none; }
+    .edgelbl { fill:#8a94a6; font-size:10px; }
+    .chip    { fill:#f0f3f9; stroke:#cdd5e1; }
+    .chipt   { fill:#2a3444; font-size:11.5px; font-weight:600; }
+    .pill    { fill:#fdecef; stroke:#e799a8; }
+    .pillt   { fill:#8c2238; font-size:11px; font-weight:700; }
+    @media (prefers-color-scheme: dark) {
+      .bg{fill:#0d1117;} .title{fill:#e8edf5;} .sub{fill:#9aa4b2;}
+      .band{fill:#141a24;stroke:#242c38;} .bandlbl{fill:#6b7585;}
+      .box{fill:#161c26;stroke:#2d3644;} .boxt{fill:#e3e9f2;} .boxd{fill:#8a94a4;}
+      .chip{fill:#19202b;stroke:#2d3644;} .chipt{fill:#cdd5e1;}
+      .kernel{fill:#2a1a10;stroke:#7a4a24;} .kernelt{fill:#f0a877;}
+      .svc{fill:#121c30;stroke:#2f5490;} .svct{fill:#8fb4f5;}
+      .mgmt{fill:#102318;stroke:#2d6b42;} .mgmtt{fill:#86cf9f;}
+      .edge{stroke:#3a4452;} .edgelbl{fill:#6b7585;}
+      .pill{fill:#2a1118;stroke:#7a2a3c;} .pillt{fill:#e799a8;}
+    }
+  </style>
+  <rect class="bg" x="0" y="0" width="1180" height="860"/>
+  <text class="title" x="40" y="48">Trellix DLP Endpoint — Architecture</text>
+  <text class="sub" x="40" y="70">How data-in-use, data-in-motion and data-at-rest are intercepted, classified against policy, and enforced on a Windows endpoint.</text>
+
+  <!-- Band 1: egress channels -->
+  <rect class="band" x="40" y="92" width="1100" height="104" rx="12"/>
+  <text class="bandlbl" x="60" y="116">MONITORED CHANNELS  ·  DATA IN USE / IN MOTION</text>
+  <g>
+    <rect class="chip" x="60"  y="128" width="118" height="52" rx="8"/><text class="chipt" x="119" y="150" text-anchor="middle">Browsers</text><text class="boxd" x="119" y="167" text-anchor="middle">Chrome · Edge · FF</text>
+    <rect class="chip" x="186" y="128" width="118" height="52" rx="8"/><text class="chipt" x="245" y="150" text-anchor="middle">Email</text><text class="boxd" x="245" y="167" text-anchor="middle">Outlook · Notes</text>
+    <rect class="chip" x="312" y="128" width="110" height="52" rx="8"/><text class="chipt" x="367" y="150" text-anchor="middle">Removable</text><text class="boxd" x="367" y="167" text-anchor="middle">USB · MTP</text>
+    <rect class="chip" x="430" y="128" width="104" height="52" rx="8"/><text class="chipt" x="482" y="150" text-anchor="middle">Print</text><text class="boxd" x="482" y="167" text-anchor="middle">local · network</text>
+    <rect class="chip" x="542" y="128" width="104" height="52" rx="8"/><text class="chipt" x="594" y="150" text-anchor="middle">Clipboard</text><text class="boxd" x="594" y="167" text-anchor="middle">copy / paste</text>
+    <rect class="chip" x="654" y="128" width="116" height="52" rx="8"/><text class="chipt" x="712" y="150" text-anchor="middle">Screen capture</text><text class="boxd" x="712" y="167" text-anchor="middle">screenshots</text>
+    <rect class="chip" x="778" y="128" width="130" height="52" rx="8"/><text class="chipt" x="843" y="150" text-anchor="middle">Cloud / sync</text><text class="boxd" x="843" y="167" text-anchor="middle">web uploads</text>
+    <rect class="chip" x="916" y="128" width="100" height="52" rx="8"/><text class="chipt" x="966" y="150" text-anchor="middle">Network</text><text class="boxd" x="966" y="167" text-anchor="middle">TCP egress</text>
+    <rect class="chip" x="1024" y="128" width="96" height="52" rx="8"/><text class="chipt" x="1072" y="150" text-anchor="middle">Files</text><text class="boxd" x="1072" y="167" text-anchor="middle">on access</text>
+  </g>
+
+  <!-- Band 2: user-mode hooks -->
+  <rect class="band" x="40" y="214" width="860" height="96" rx="12"/>
+  <text class="bandlbl" x="60" y="238">USER-MODE HOOKS  ·  injected per process by the injection driver (madCodeHook)</text>
+  <g>
+    <rect class="box" x="60"  y="250" width="120" height="48" rx="8"/><text class="boxt" x="120" y="272" text-anchor="middle">Browser hooks</text><text class="boxd" x="120" y="288" text-anchor="middle">fcagchrome/ff/iep</text>
+    <rect class="box" x="188" y="250" width="118" height="48" rx="8"/><text class="boxt" x="247" y="272" text-anchor="middle">Outlook hook</text><text class="boxd" x="247" y="288" text-anchor="middle">fcagolh · fcom</text>
+    <rect class="box" x="314" y="250" width="104" height="48" rx="8"/><text class="boxt" x="366" y="278" text-anchor="middle">Clipboard</text>
+    <rect class="box" x="426" y="250" width="92"  height="48" rx="8"/><text class="boxt" x="472" y="278" text-anchor="middle">Print</text>
+    <rect class="box" x="526" y="250" width="120" height="48" rx="8"/><text class="boxt" x="586" y="278" text-anchor="middle">Screen capture</text>
+    <rect class="box" x="654" y="250" width="104" height="48" rx="8"/><text class="boxt" x="706" y="278" text-anchor="middle">Cloud / MTP</text>
+    <rect class="box" x="766" y="250" width="118" height="48" rx="8"/><text class="boxt" x="825" y="272" text-anchor="middle">File access</text><text class="boxd" x="825" y="288" text-anchor="middle">fcagafa/cfh</text>
+  </g>
+
+  <!-- Native messaging host (right of hooks) -->
+  <rect class="box" x="916" y="214" width="204" height="96" rx="12"/>
+  <text class="boxt" x="1018" y="250" text-anchor="middle">Native Messaging Host</text>
+  <text class="boxd" x="1018" y="270" text-anchor="middle">fcnm.exe · fcnmtub.exe</text>
+  <text class="boxd" x="1018" y="286" text-anchor="middle">bridges the browser</text>
+  <text class="boxd" x="1018" y="300" text-anchor="middle">extension to the agent</text>
+
+  <!-- Band 3: Agent service -->
+  <rect class="svc" x="40" y="330" width="860" height="196" rx="12"/>
+  <text class="svct" x="60" y="356">DLP AGENT SERVICE  ·  fcags.exe  (TrellixDLPAgentService, SYSTEM)</text>
+  <rect class="box" x="60"  y="372" width="196" height="64" rx="8"/><text class="boxt" x="158" y="400" text-anchor="middle">Policy Engine</text><text class="boxd" x="158" y="418" text-anchor="middle">rules · reactions · exceptions</text>
+  <rect class="box" x="268" y="372" width="196" height="64" rx="8"/><text class="boxt" x="366" y="394" text-anchor="middle">Classification</text><text class="boxd" x="366" y="410" text-anchor="middle">KeyView extractors (~400 fmts)</text><text class="boxd" x="366" y="424" text-anchor="middle">OCR · regex · dictionaries</text>
+  <rect class="box" x="476" y="372" width="196" height="64" rx="8"/><text class="boxt" x="574" y="394" text-anchor="middle">Labels &amp; Crypto</text><text class="boxd" x="574" y="410" text-anchor="middle">MIP / Purview · RMS</text><text class="boxd" x="574" y="424" text-anchor="middle">OpenSSL / FIPS</text>
+  <rect class="box" x="684" y="372" width="196" height="64" rx="8"/><text class="boxt" x="782" y="394" text-anchor="middle">Identity</text><text class="boxd" x="782" y="410" text-anchor="middle">Entra / MSAL</text><text class="boxd" x="782" y="424" text-anchor="middle">user · tenant</text>
+  <rect class="box" x="60"  y="448" width="256" height="62" rx="8"/><text class="boxt" x="188" y="474" text-anchor="middle">Evidence &amp; Event Reporting</text><text class="boxd" x="188" y="492" text-anchor="middle">incidents · evidence copies</text>
+  <rect class="box" x="328" y="448" width="256" height="62" rx="8"/><text class="boxt" x="456" y="474" text-anchor="middle">Per-session Agent</text><text class="boxd" x="456" y="492" text-anchor="middle">fcag.exe · user notifications</text>
+  <rect class="box" x="596" y="448" width="284" height="62" rx="8"/><text class="boxt" x="738" y="474" text-anchor="middle">Text Extractor Host</text><text class="boxd" x="738" y="492" text-anchor="middle">fcagte.exe · fcpst.exe (PST crawler)</text>
+
+  <!-- Self protection (right column) -->
+  <rect class="pill" x="916" y="330" width="204" height="196" rx="12"/>
+  <text class="pillt" x="1018" y="356" text-anchor="middle">SELF-PROTECTION</text>
+  <rect class="box" x="936" y="372" width="164" height="42" rx="8"/><text class="boxt" x="1018" y="398" text-anchor="middle">Service Watchdog</text>
+  <rect class="box" x="936" y="420" width="164" height="42" rx="8"/><text class="boxt" x="1018" y="446" text-anchor="middle">Access Protection</text>
+  <rect class="box" x="936" y="468" width="164" height="42" rx="8"/><text class="boxt" x="1018" y="488" text-anchor="middle">Uninstall Protection</text>
+
+  <!-- Band 4: kernel drivers -->
+  <rect class="kernel" x="40" y="546" width="860" height="150" rx="12"/>
+  <text class="kernelt" x="60" y="572" style="letter-spacing:.14em">KERNEL DRIVERS  ·  ring 0 enforcement</text>
+  <rect class="box" x="60"  y="586" width="190" height="48" rx="8"/><text class="boxt" x="155" y="608" text-anchor="middle">hdlpflt.sys</text><text class="boxd" x="155" y="624" text-anchor="middle">file minifilter (alt 261200)</text>
+  <rect class="box" x="262" y="586" width="166" height="48" rx="8"/><text class="boxt" x="345" y="608" text-anchor="middle">hdlpnetmonitor.sys</text><text class="boxd" x="345" y="624" text-anchor="middle">WFP network callout</text>
+  <rect class="box" x="440" y="586" width="166" height="48" rx="8"/><text class="boxt" x="523" y="608" text-anchor="middle">hdlpdbk.sys</text><text class="boxd" x="523" y="624" text-anchor="middle">device blocking</text>
+  <rect class="box" x="618" y="586" width="134" height="48" rx="8"/><text class="boxt" x="685" y="608" text-anchor="middle">hdlphook.sys</text><text class="boxd" x="685" y="624" text-anchor="middle">injection</text>
+  <rect class="box" x="764" y="586" width="116" height="48" rx="8"/><text class="boxt" x="822" y="608" text-anchor="middle">hdlpctrl.sys</text><text class="boxd" x="822" y="624" text-anchor="middle">controller</text>
+  <rect class="box" x="60"  y="644" width="190" height="42" rx="8"/><text class="boxt" x="155" y="670" text-anchor="middle">hdlpevnt.sys — event bus to the service</text>
+  <text class="boxd" x="470" y="664" >The controller coordinates the drivers; the event driver streams kernel events up to fcags.exe, which applies policy and returns an allow / block / encrypt verdict.</text>
+
+  <!-- Band 5: management plane -->
+  <rect class="mgmt" x="40" y="716" width="1080" height="110" rx="12"/>
+  <text class="mgmtt" x="60" y="742" style="letter-spacing:.14em">MANAGEMENT PLANE</text>
+  <rect class="box" x="60"  y="754" width="236" height="56" rx="8"/><text class="boxt" x="178" y="780" text-anchor="middle">ePolicy Orchestrator (ePO)</text><text class="boxd" x="178" y="797" text-anchor="middle">central policy &amp; incident console</text>
+  <rect class="box" x="308" y="754" width="236" height="56" rx="8"/><text class="boxt" x="426" y="780" text-anchor="middle">McAfee / Trellix Agent</text><text class="boxd" x="426" y="797" text-anchor="middle">transport: policy down, events up</text>
+  <rect class="box" x="556" y="754" width="250" height="56" rx="8"/><text class="boxt" x="681" y="780" text-anchor="middle">Policy Store</text><text class="boxd" x="681" y="797" text-anchor="middle">GlobalPolicy.opg (encrypted)</text>
+  <rect class="box" x="818" y="754" width="282" height="56" rx="8"/><text class="boxt" x="959" y="780" text-anchor="middle">Classification Definitions</text><text class="boxd" x="959" y="797" text-anchor="middle">dictionaries · fingerprints · templates</text>
+
+  <!-- vertical connectors -->
+  <path class="edge" d="M480,196 L480,214"/>
+  <path class="edge" d="M470,310 L470,330"/>
+  <path class="edge" d="M1018,310 L1018,330"/>
+  <path class="edge" d="M470,526 L470,546"/>
+  <path class="edge" d="M470,696 L470,716"/>
+  <path class="edge" d="M1018,526 L1018,546" />
+</svg>
