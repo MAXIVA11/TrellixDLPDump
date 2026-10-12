@@ -24,13 +24,13 @@
 - [Component reference](#component-reference)
   - [1 · Kernel drivers (ring 0)](#1--kernel-drivers-ring-0) — **[deep dive: the drivers](docs/DRIVERS.md)**
   - [2 · The agent service & processes](#2--the-agent-service--processes) — **[deep dive: `fcags.exe`](docs/FCAGS.md)**
-  - [3 · User-mode hooks](#3--user-mode-hooks)
-  - [4 · Content classification: KeyView + OCR](#4--content-classification-keyview--ocr)
-  - [5 · Labels, encryption & identity](#5--labels-encryption--identity)
-  - [6 · Browser integration](#6--browser-integration)
-  - [7 · Email integration](#7--email-integration)
-  - [8 · Self-protection](#8--self-protection)
-  - [9 · Management plane (ePO)](#9--management-plane-epo)
+  - [3 · User-mode hooks](#3--user-mode-hooks) — **[deep dive: the hooks](docs/HOOKS.md)**
+  - [4 · Content classification: KeyView + OCR](#4--content-classification-keyview--ocr) — **[deep dive: classification](docs/CLASSIFICATION.md)**
+  - [5 · Labels, encryption & identity](#5--labels-encryption--identity) — **[deep dive: crypto & identity](docs/CRYPTO-IDENTITY.md)**
+  - [6 · Browser integration](#6--browser-integration) — **[deep dive: browser](docs/BROWSER.md)**
+  - [7 · Email integration](#7--email-integration) — **[deep dive: email](docs/EMAIL.md)**
+  - [8 · Self-protection](#8--self-protection) — **[deep dive: self-protection](docs/SELF-PROTECTION.md)**
+  - [9 · Management plane (ePO)](#9--management-plane-epo) — **[deep dive: management](docs/MANAGEMENT.md)**
 - [Where everything lives on disk](#where-everything-lives-on-disk)
 - [Tools](#tools)
 - [Evidence & method](#evidence--method)
@@ -150,6 +150,8 @@ and mechanism — in **[docs/DRIVERS.md](docs/DRIVERS.md)**.
 
 ### 3 · User-mode hooks
 
+> 📘 **Deep dive:** [the hooks & how they're injected](docs/HOOKS.md)
+
 Injected into applications by `hdlphook.sys` to see content **in context**, while it is
 still plaintext. They ship as 32- and 64-bit pairs.
 
@@ -167,6 +169,8 @@ still plaintext. They ship as 32- and 64-bit pairs.
 
 ### 4 · Content classification: KeyView + OCR
 
+> 📘 **Deep dive:** [extraction (KeyView/OCR) & the CSF matching engine](docs/CLASSIFICATION.md)
+
 How the agent *reads* content so it can be matched against rules.
 
 - **~194 KeyView filters** (`*sr.dll`, `kp*rdr.dll`, `kv*.dll`) — OpenText KeyView, the
@@ -182,6 +186,8 @@ dictionaries, regular expressions, document fingerprints, and sensitivity labels
 
 ### 5 · Labels, encryption & identity
 
+> 📘 **Deep dive:** [MIP/RMS labels, crypto & Entra identity](docs/CRYPTO-IDENTITY.md)
+
 | Component | Purpose |
 |---|---|
 | `mip_*.dll` (core, file, protection, upe SDKs) | **Microsoft Information Protection / Purview** — read and honour sensitivity labels and open RMS-protected content. |
@@ -190,6 +196,8 @@ dictionaries, regular expressions, document fingerprints, and sensitivity labels
 | `msalruntime.dll`, `Microsoft.Identity.Client*`, `AzureAuthentication.dll`, `EntraIdBridge.dll` | **Entra ID / MSAL** — resolve the signed-in user and tenant for identity-aware policy and cloud auth. |
 
 ### 6 · Browser integration
+
+> 📘 **Deep dive:** [extension → native-messaging host → service, + hooks + WFP](docs/BROWSER.md)
 
 A three-part chain, because browsers sandbox their content:
 
@@ -207,6 +215,8 @@ Browser extension  ──stdio──►  Native Messaging Host  ──IPC──�
 
 ### 7 · Email integration
 
+> 📘 **Deep dive:** [Outlook (hook + web add-in), Notes, PST discovery](docs/EMAIL.md)
+
 - **`fcom.exe` + `fcagolh*`** inspect Outlook messages at send time.
 - **`outlook_monitor.bundle`** is a modern Outlook **web add-in** — it even ships a local
   TLS cert (`localhost.pem`) so the add-in can talk to a loopback HTTPS endpoint.
@@ -215,15 +225,20 @@ Browser extension  ──stdio──►  Native Messaging Host  ──IPC──�
 
 ### 8 · Self-protection
 
+> 📘 **Deep dive:** [watchdogs, Access Protection & kernel handle-stripping](docs/SELF-PROTECTION.md)
+
 Because a security control is only as good as its resistance to being switched off:
 
 - **`UninstallProtection.exe`** — blocks unauthorized removal.
 - **`fcagswd.exe`** + a per-session `AgentWatchDog` thread — restart the agent if killed.
 - **Access Protection** — the service registers kernel-backed protection of its own
-  files, services and registry (`AccessProtectionObject OK!` in the log).
-- The **policy store is ACL-locked** — even listing it is denied to a normal user.
+  resources (`AccessProtectionObject OK!` in the log).
+- **Kernel handle-stripping** — `hdlpflt.sys` uses `ObRegisterCallbacks` to remove
+  dangerous access rights from handles opened to the protected processes.
 
 ### 9 · Management plane (ePO)
+
+> 📘 **Deep dive:** [policy distribution, connectivity & discovery](docs/MANAGEMENT.md)
 
 The agent is normally **centrally managed** by **ePolicy Orchestrator (ePO)**:
 
