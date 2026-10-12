@@ -32,7 +32,7 @@
   - [8 · Self-protection](#8--self-protection)
   - [9 · Management plane (ePO)](#9--management-plane-epo)
 - [Where everything lives on disk](#where-everything-lives-on-disk)
-- [The `dlpdump` tool](#the-dlpdump-tool)
+- [Tools](#tools)
 - [Evidence & method](#evidence--method)
 - [Disclaimer](#disclaimer)
 
@@ -261,15 +261,18 @@ HKLM\SOFTWARE\McAfee\DLP\Agent            ← configuration & management state
 
 ---
 
-## The `dlpdump` tool
+## Tools
 
-A small, **strictly read-only** inspector that dumps the live deployment — exactly the
-evidence this guide is built from. It changes nothing: it never starts, stops, disables
-or reconfigures the agent.
+Two small, **strictly read-only** Go tools ship with this guide. Neither starts, stops,
+disables, reconfigures, exploits or bypasses the agent — every capability is a read-only
+observation.
+
+### 🔎 [`dlpdump`](dlpdump/) — inspector
+
+Dumps the live deployment — exactly the evidence this guide is built from.
 
 ```bash
-cd dlpdump
-go build -o dlpdump.exe .
+cd dlpdump && go build -o dlpdump.exe .
 
 dlpdump                 # full report (text)
 dlpdump --format md     # Markdown component catalog (the tables above, from YOUR machine)
@@ -277,9 +280,33 @@ dlpdump --format json   # machine-readable
 dlpdump --deep          # verify the Authenticode signature of every module
 ```
 
-It reports: the component inventory grouped by subsystem with signature verification,
-the live state of the services and six kernel drivers, the management/policy state, and a
-health summary parsed from the agent's own log. See [`dlpdump/README.md`](dlpdump/README.md).
+Reports the component inventory by subsystem with signature verification, the live state
+of the services and six kernel drivers, the management/policy state, and a log-parsed
+health summary.
+
+### 🛡️ [`dlpaudit`](dlpaudit/) — posture & hardening auditor
+
+Finds **security holes in the deployment** — uncovered egress channels, enforcement not
+actually running, self-protection off, tampered binaries — and scores the posture.
+
+```bash
+cd dlpaudit && go build -o dlpaudit.exe .
+
+dlpaudit                      # ranked findings (failures first) + 0-100 posture score
+dlpaudit --all                # include passing checks
+dlpaudit --json               # machine-readable (SIEM / dashboard)
+dlpaudit --fail-on critical   # non-zero exit for scheduled/CI use
+```
+
+```
+ Posture score: 76/100    adequate, with gaps
+ Weaknesses:    1 CRITICAL, 1 HIGH, 1 MEDIUM, 1 LOW
+ [FAIL] CRITICAL  A policy is loaded  (ENF-02)
+ [FAIL] HIGH      Device / removable-media control active (hdlpdbk)  (COV-03)
+```
+
+It checks enforcement, channel coverage (per driver), tamper resistance, binary
+integrity, management and hygiene — see [`dlpaudit/README.md`](dlpaudit/README.md).
 
 ---
 
