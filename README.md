@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛡️ Trellix DLP Endpoint — Field Guide
+# 🛡️ Trellix DLP Endpoint
 
 ### How every component of Trellix (McAfee) Data Loss Prevention actually works
 
