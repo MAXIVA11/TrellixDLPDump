@@ -22,7 +22,7 @@
 - [The architecture at a glance](#the-architecture-at-a-glance)
 - [How a single action is evaluated](#how-a-single-action-is-evaluated)
 - [Component reference](#component-reference)
-  - [1 · Kernel drivers (ring 0)](#1--kernel-drivers-ring-0)
+  - [1 · Kernel drivers (ring 0)](#1--kernel-drivers-ring-0) — **[deep dive: the drivers](docs/DRIVERS.md)**
   - [2 · The agent service & processes](#2--the-agent-service--processes) — **[deep dive: `fcags.exe`](docs/FCAGS.md)**
   - [3 · User-mode hooks](#3--user-mode-hooks)
   - [4 · Content classification: KeyView + OCR](#4--content-classification-keyview--ocr)
@@ -113,7 +113,8 @@ while **enforcement is backed by kernel drivers** that the application cannot by
 ### 1 · Kernel drivers (ring 0)
 
 The enforcement floor. Six drivers, loaded as Windows services, that an application
-cannot go around.
+cannot go around. Each one gets a focused teardown — device objects, imported kernel APIs
+and mechanism — in **[docs/DRIVERS.md](docs/DRIVERS.md)**.
 
 | Driver | Role | Mechanism |
 |---|---|---|
